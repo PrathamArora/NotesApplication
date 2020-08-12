@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="edit_button">Edit Button</string>
+    <string name="delete_button">Delete Button</string>
+    <string name="no_notes">No Notes</string>
+</resources>

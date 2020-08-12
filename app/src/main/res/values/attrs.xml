@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="customDarkTextColor" format="color"/>
+    <attr name="customLightTextColor" format="color"/>
+    <attr name="customBackgroundImage" format="reference"/>
+    <attr name="customDrawerBackgroundImage" format="reference"/>
+    <attr name="customContainerBackground" format="color"/>
+    <attr name="customCardBackground" format="color"/>
+    <attr name="customEditButton" format="reference"/>
+    <attr name="customDeleteButton" format="reference"/>
+    <attr name="customProgressBarColor" format="color"/>
+    <attr name="customEmptyImage" format="reference"/>
+</resources>

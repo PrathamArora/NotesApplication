@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardLabelContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="?customContainerBackground"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/imgLabelColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ababab"
+                android:contentDescription="Label Color"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvLabelTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Work"
+            android:textColor="?customDarkTextColor"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

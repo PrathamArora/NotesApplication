@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvChooseLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_round_corner"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="Choose Label"
+        android:textColor="?customDarkTextColor"
+        android:textSize="24sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvAllLabels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?customCardBackground"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
+
+</LinearLayout>
