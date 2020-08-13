@@ -1,7 +1,8 @@
 package com.wheelseye.notesapp.db.repository
 
 import android.content.Context
-import com.wheelseye.notesapp.base.workmanager.SyncNotesWorkManager
+import com.wheelseye.notesapp.base.workmanager.model.NoteIdMapModel
+import com.wheelseye.notesapp.base.workmanager.model.NoteServerModel
 import com.wheelseye.notesapp.db.dao.NoteDao
 import com.wheelseye.notesapp.db.database.NotesRoomDatabase
 import com.wheelseye.notesapp.db.entity.Note
@@ -41,7 +42,7 @@ class NotesRepository(context: Context) {
         noteDao?.updateNoteById(notesID, title, message, currentDate, label)
     }
 
-    fun getAllNewNotes(): List<Note>? {
+    fun getAllNewNotes(): List<NoteServerModel>? {
         return noteDao?.getAllNewNotes()
     }
 
@@ -49,7 +50,7 @@ class NotesRepository(context: Context) {
         noteDao?.updateNewNotesServerNotesID(appNotesID, serverNotesID)
     }
 
-    fun getAllEditedNotes(): List<Note>? {
+    fun getAllEditedNotes(): List<NoteServerModel>? {
         return noteDao?.getAllEditedNotes()
     }
 
@@ -57,7 +58,7 @@ class NotesRepository(context: Context) {
         noteDao?.updateEditedNotes(appNotesID, serverNotesID)
     }
 
-    fun getAllDeletedNotes(): List<SyncNotesWorkManager.NoteIdMapModel>? {
+    fun getAllDeletedNotes(): List<NoteIdMapModel>? {
         return noteDao?.getAllDeletedNotes()
     }
 

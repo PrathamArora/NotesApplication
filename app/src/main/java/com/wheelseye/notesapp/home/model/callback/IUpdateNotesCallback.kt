@@ -1,6 +1,5 @@
-package com.wheelseye.notesapp.home.model.repository
+package com.wheelseye.notesapp.home.model.callback
 
-import com.wheelseye.notesapp.crudNotes.model.service.NoteModel
 import com.wheelseye.notesapp.db.entity.Note
 
 interface IUpdateNotesCallback {

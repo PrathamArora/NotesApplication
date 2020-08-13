@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.wheelseye.notesapp.base.activity.BaseActivity.Companion.DB_NAME
 import com.wheelseye.notesapp.db.dao.NoteDao
 import com.wheelseye.notesapp.db.entity.Note
 
@@ -13,8 +14,6 @@ abstract class NotesRoomDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
     companion object {
-
-        private const val DB_NAME = "user_notes.db"
 
         @Volatile
         private var notesRoomDatabase: NotesRoomDatabase? = null

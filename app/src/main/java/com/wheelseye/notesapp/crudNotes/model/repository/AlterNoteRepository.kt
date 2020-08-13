@@ -1,8 +1,7 @@
 package com.wheelseye.notesapp.crudNotes.model.repository
 
 import android.content.Context
-import com.wheelseye.notesapp.crudNotes.view.INoteAlteredCallback
-import com.wheelseye.notesapp.db.database.NotesRoomDatabase
+import com.wheelseye.notesapp.crudNotes.model.callback.INoteAlteredCallback
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.db.repository.NotesRepository
 import com.wheelseye.notesapp.utility.Utility
@@ -21,14 +20,6 @@ class AlterNoteRepository {
     }
 
     fun addNote(iNoteAlteredCallback: INoteAlteredCallback, note: Note) {
-//        val noteForDB = Note(
-//            serverNotesID = noteModel.notesID?.toLong()!!,
-//            title = noteModel.title!!,
-//            message = noteModel.message!!,
-//            label = noteModel.label!!,
-//            date = Utility.getCurrentDate()
-//        )
-
         GlobalScope.launch {
             try {
                 addNoteToDB(note)

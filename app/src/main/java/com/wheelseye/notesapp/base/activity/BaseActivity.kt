@@ -1,6 +1,5 @@
 package com.wheelseye.notesapp.base.activity
 
-import android.R.attr.tag
 import android.content.Context
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -9,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.work.*
-import com.google.common.util.concurrent.ListenableFuture
 import com.wheelseye.notesapp.base.workmanager.SyncNotesWorkManager
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.utility.NoteLabel
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 
 
@@ -21,8 +18,10 @@ abstract class BaseActivity : AppCompatActivity(),
     IViewInitializer {
 
     companion object {
-//        const val BASE_URL = "https://demo1431226.mockable.io"
         const val BASE_URL = "http://192.168.15.149:8080"
+
+        const val DB_NAME = "user_notes.db"
+
         const val TAG = "NotesAppTag"
 
         const val SHOW_LOADER = true
@@ -31,27 +30,41 @@ abstract class BaseActivity : AppCompatActivity(),
         const val USER_DETAILS_SHARED_PREF = "USER_DETAILS_SHARED_PREF"
         const val USER_ID = "USER_ID"
         const val USER_EMAIL_ID = "USER_EMAIL_ID"
+        const val GUEST_USER = "Guest User"
 
-        const val USER_NOTES_MODEL_KEY = "USER_NOTES_MODEL_KEY"
         const val SINGLE_NOTE_KEY = "SINGLE_NOTE_KEY"
+
+        const val WORK_MANAGER_TAG = "SyncDataWorkManager"
 
         const val PORTRAIT_NOTES = 2
         const val LANDSCAPE_NOTES = 3
 
         const val DATE_FORMAT = "dd/MM/yyyy"
+        const val CHOOSE_LABEL_TAG = "Choose Label"
+        const val LABEL_WORK = "Work"
+        const val LABEL_SELF = "Self"
+        const val LABEL_OTHER = "Other"
+
+        const val LABEL_SELF_INT = 1
+        const val LABEL_WORK_INT = 2
+        const val LABEL_OTHER_INT = 3
+
+        const val STRING_INITIALIZING = "Initializing..."
+        const val STRING_ADD_NOTE = "Adding Note..."
+        const val STRING_UPDATE_NOTE = "Updating Note..."
+        const val STRING_DELETE_NOTE = "Deleting Note..."
+        const val STRING_UPDATE_NOTE_TO = "Updating Label to "
+        const val STRING_LOG_OUT = "Logging Out"
+        const val STRING_CHECK_CREDENTIALS = "Checking Credentials"
+        const val STRING_YES = "Yes"
+        const val STRING_NO = "No"
+        const val STRING_EMPTY = ""
 
         fun manageLabel(imageView: ImageView?, context: Context, note: Note) {
             val colorDrawablePair = NoteLabel.getColorAndDrawable(note.label)
             if (NoteLabel.outOfLimits(note.label)) {
                 note.label = NoteLabel.getDefaultKey()
             }
-
-//            imageView?.setImageDrawable(
-//                context.resources.getDrawable(
-//                    colorDrawablePair.second,
-//                    null
-//                )
-//            )
 
             imageView?.setImageDrawable(
                 ResourcesCompat.getDrawable(context.resources, colorDrawablePair.second, null)
@@ -66,7 +79,7 @@ abstract class BaseActivity : AppCompatActivity(),
             .build()
 
         val periodicSyncWorkManager =
-            PeriodicWorkRequest.Builder(SyncNotesWorkManager::class.java, 20, TimeUnit.SECONDS)
+            PeriodicWorkRequest.Builder(SyncNotesWorkManager::class.java, 15, TimeUnit.MINUTES)
                 .addTag(workManagerTag)
                 .setConstraints(constraints)
                 .setBackoffCriteria(
@@ -85,29 +98,8 @@ abstract class BaseActivity : AppCompatActivity(),
         WorkManager.getInstance(applicationContext)
             .getWorkInfoByIdLiveData(periodicSyncWorkManager.id)
             .observe(this, Observer {
-                Log.d("SyncDataWorkManager", it.toString())
+                Log.d(WORK_MANAGER_TAG, it.toString())
             })
-    }
-
-    fun isWorkManagerScheduled(workManagerTag: String): Boolean {
-        val instance = WorkManager.getInstance(applicationContext)
-        val statuses: ListenableFuture<List<WorkInfo>> =
-            instance.getWorkInfosByTag(workManagerTag)
-        return try {
-            var running = false
-            val workInfoList: List<WorkInfo> = statuses.get()
-            for (workInfo in workInfoList) {
-                val state = workInfo.state
-                running = (state == WorkInfo.State.RUNNING).or(state == WorkInfo.State.ENQUEUED)
-            }
-            running
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            false
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            false
-        }
     }
 
     fun stopWorkManager(workManagerTag: String) {

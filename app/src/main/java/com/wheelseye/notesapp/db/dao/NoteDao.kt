@@ -2,9 +2,9 @@ package com.wheelseye.notesapp.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.wheelseye.notesapp.base.workmanager.SyncNotesWorkManager
+import com.wheelseye.notesapp.base.workmanager.model.NoteIdMapModel
+import com.wheelseye.notesapp.base.workmanager.model.NoteServerModel
 import com.wheelseye.notesapp.db.entity.Note
-import kotlinx.coroutines.selects.select
 
 @Dao
 interface NoteDao {
@@ -36,20 +36,20 @@ interface NoteDao {
         label: Int
     )
 
-    @Query("select * from UserNotes where serverNotesID = -1 and isDeleted = 0")
-    fun getAllNewNotes(): List<Note>?
+    @Query("select serverNotesID as notesID, notesID as appNotesID, title, message, date, label from UserNotes where serverNotesID = -1")
+    fun getAllNewNotes(): List<NoteServerModel>?
 
     @Query("update UserNotes set serverNotesID = :serverNotesID, isEdited = 0 where notesID = :appNotesID")
     fun updateNewNotesServerNotesID(appNotesID: Long, serverNotesID: Long)
 
-    @Query("select * from UserNotes where serverNotesID != -1 and isDeleted = 0 and isEdited = 1")
-    fun getAllEditedNotes(): List<Note>?
+    @Query("select notesID as appNotesID, serverNotesID as notesID, title, message, date, label from UserNotes where serverNotesID != -1 and isDeleted = 0 and isEdited = 1")
+    fun getAllEditedNotes(): List<NoteServerModel>?
 
     @Query("update UserNotes set isEdited = 0, serverNotesID = :serverNotesID where notesID = :appNotesID")
     fun updateEditedNotes(appNotesID: Long, serverNotesID: Long)
 
     @Query("select notesID as appNotesID, serverNotesID as notesID from UserNotes where serverNotesID != -1 and isDeleted = 1")
-    fun getAllDeletedNotes(): List<SyncNotesWorkManager.NoteIdMapModel>?
+    fun getAllDeletedNotes(): List<NoteIdMapModel>?
 
     @Query("delete from UserNotes where notesID = :appNotesID")
     fun updateDeletedNotes(appNotesID: Long)

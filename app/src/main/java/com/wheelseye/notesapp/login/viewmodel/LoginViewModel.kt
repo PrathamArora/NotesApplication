@@ -5,10 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wheelseye.notesapp.base.activity.BaseActivity
-import com.wheelseye.notesapp.login.model.repository.ILoginCallback
+import com.wheelseye.notesapp.login.model.callback.ILoginCallback
 import com.wheelseye.notesapp.login.model.repository.LoginRepository
 
-class LoginViewModel : ViewModel(), ILoginCallback {
+class LoginViewModel : ViewModel(),
+    ILoginCallback {
 
     private val mIsUpdating = MutableLiveData<Pair<Boolean, String>>()
     private val mLoginRepository = LoginRepository()
@@ -20,7 +21,7 @@ class LoginViewModel : ViewModel(), ILoginCallback {
     }
 
     fun performLogin(context: Context, emailID: String) {
-        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, "Checking Credentials")
+        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, BaseActivity.STRING_CHECK_CREDENTIALS)
         mLoginRepository.performLogin(emailID, context, this)
     }
 

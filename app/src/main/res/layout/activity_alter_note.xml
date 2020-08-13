@@ -51,7 +51,7 @@
                     android:layout_weight="9"
                     android:autofillHints=""
                     android:background="@null"
-                    android:hint="Title"
+                    android:hint="@string/title"
                     android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                     android:maxLength="50"
                     android:textColor="?customDarkTextColor"
@@ -65,7 +65,8 @@
                     android:layout_gravity="top"
                     android:layout_weight="2"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/self_note" />
+                    android:src="@drawable/self_note"
+                    android:contentDescription="@string/note_label" />
 
             </LinearLayout>
 
@@ -77,7 +78,7 @@
                 android:layout_marginTop="20dp"
                 android:autofillHints=""
                 android:background="@null"
-                android:hint="Note"
+                android:hint="@string/note"
                 android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                 android:maxLength="500"
                 android:textColor="?customDarkTextColor"
@@ -96,7 +97,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button_selector"
-        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

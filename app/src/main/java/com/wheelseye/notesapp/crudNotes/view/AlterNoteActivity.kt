@@ -9,7 +9,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.wheelseye.notesapp.R
 import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.base.view.bottomsheet.ChooseLabelBottomSheet
-import com.wheelseye.notesapp.crudNotes.model.service.NoteModel
 import com.wheelseye.notesapp.crudNotes.viewmodel.AlterNoteViewModel
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.utility.NoteLabel
@@ -45,12 +44,12 @@ class AlterNoteActivity : BaseActivity(),
 
         if (intent.hasExtra(SINGLE_NOTE_KEY) && intent.getSerializableExtra(SINGLE_NOTE_KEY) != null) {
             isEditMode = true
-            supportActionBar?.title = "Edit Note"
-            btnSave.text = "Save"
+            supportActionBar?.title = resources.getText(R.string.edit_note).toString()
+            btnSave.text = resources.getText(R.string.save).toString()
             note = intent.getSerializableExtra(SINGLE_NOTE_KEY) as Note
         } else {
-            supportActionBar?.title = "Add Note"
-            btnSave.text = "Add"
+            supportActionBar?.title = resources.getText(R.string.add_note).toString()
+            btnSave.text = resources.getText(R.string.add).toString()
             note = Note(
                 serverNotesID = noteID,
                 title = "",
@@ -70,7 +69,7 @@ class AlterNoteActivity : BaseActivity(),
         imgNoteLabel.setOnClickListener {
             chooseLabelBottomSheet =
                 ChooseLabelBottomSheet()
-            chooseLabelBottomSheet?.show(supportFragmentManager, "Choose Label")
+            chooseLabelBottomSheet?.show(supportFragmentManager, CHOOSE_LABEL_TAG)
         }
     }
 
@@ -79,7 +78,11 @@ class AlterNoteActivity : BaseActivity(),
         val message = etMessage.text.toString().trim()
 
         if (title.isEmpty() && message.isEmpty()) {
-            Snackbar.make(container, "Unable to save empty note.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                container,
+                resources.getString(R.string.unable_to_save_empty_note),
+                Snackbar.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -119,13 +122,22 @@ class AlterNoteActivity : BaseActivity(),
 
         mAlterNoteViewModel?.isNoteAlteredSuccessfully()?.observe(this, Observer {
             if (it) {
-                Toast.makeText(this, "Note Saved.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.note_saved), Toast.LENGTH_LONG)
+                    .show()
                 finish()
             } else {
                 if (isEditMode)
-                    Snackbar.make(container, "Unable to update note.", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        container,
+                        resources.getString(R.string.unable_to_update_note),
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 else
-                    Snackbar.make(container, "Unable to add note.", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        container,
+                        resources.getString(R.string.unable_to_add_note),
+                        Snackbar.LENGTH_LONG
+                    ).show()
             }
         })
     }

@@ -3,11 +3,11 @@ package com.wheelseye.notesapp.login.model.repository
 import android.content.Context
 import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.base.api.GenericAPIModel
-import com.wheelseye.notesapp.db.database.NotesRoomDatabase
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.db.entity.UserNotes
 import com.wheelseye.notesapp.db.repository.NotesRepository
 import com.wheelseye.notesapp.login.model.UserNotesModel
+import com.wheelseye.notesapp.login.model.callback.ILoginCallback
 import com.wheelseye.notesapp.login.model.service.IUserNotesEndPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,11 +24,7 @@ class LoginRepository {
     private var mUserNotes: UserNotes? = null
 
     fun performLogin(emailID: String, context: Context, iLoginCallback: ILoginCallback) {
-
         getUserDetailsAndNotes(iLoginCallback, emailID, context)
-
-
-//        dummyData(iLoginCallback)
     }
 
     private fun getUserDetailsAndNotes(
@@ -104,36 +100,4 @@ class LoginRepository {
             }
         )
     }
-
-//    private fun dummyData(iLoginCallback: ILoginCallback) {
-//
-//        Handler(Looper.getMainLooper()).postDelayed(
-//            {
-//                val noteModelList = ArrayList<NoteModel>()
-//                for (i in 1..5) {
-//                    if (i % 2 == 0) {
-//                        noteModelList.add(
-//                            NoteModel(
-//                                1,
-//                                "heading 1 heading 1 heading 1 heading 1 heading 1 heading 1 heading 1 ",
-//                                "message 1 message 1 message 1 message 1 message 1 message 1 message 1 ",
-//                                "29/07/2020"
-//                            )
-//                        )
-//                    }
-//                    noteModelList.add(
-//                        NoteModel(i, "heading $i", "message $i", "29/07/2020")
-//                    )
-//                }
-//                val tempUserNotesModel =
-//                    UserNotesModel(
-//                        1,
-//                        noteModelList
-//                    )
-//                iLoginCallback.updateLoginDetails(tempUserNotesModel)
-//            },
-//            3000
-//        )
-//    }
-
 }

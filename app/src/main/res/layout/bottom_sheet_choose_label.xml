@@ -11,7 +11,7 @@
         android:background="@drawable/bottom_sheet_round_corner"
         android:gravity="center_horizontal"
         android:padding="10dp"
-        android:text="Choose Label"
+        android:text="@string/choose_label"
         android:textColor="?customDarkTextColor"
         android:textSize="24sp" />
 

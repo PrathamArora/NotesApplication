@@ -6,34 +6,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.crudNotes.model.repository.AlterNoteRepository
-import com.wheelseye.notesapp.crudNotes.model.service.NoteModel
-import com.wheelseye.notesapp.crudNotes.view.INoteAlteredCallback
+import com.wheelseye.notesapp.crudNotes.model.callback.INoteAlteredCallback
 import com.wheelseye.notesapp.db.entity.Note
 
-class AlterNoteViewModel : ViewModel(), INoteAlteredCallback {
+class AlterNoteViewModel : ViewModel(),
+    INoteAlteredCallback {
 
     private val mAlterNoteRepository = AlterNoteRepository()
     private val mIsUpdating = MutableLiveData<Pair<Boolean, String>>()
     private val mIsNoteAlteredSuccessfully = MutableLiveData<Boolean>()
 
     fun init(context: Context) {
-        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, "Initializing...")
+        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, BaseActivity.STRING_INITIALIZING)
         mAlterNoteRepository.init(context)
-        mIsUpdating.value = Pair(BaseActivity.HIDE_LOADER, "")
+        mIsUpdating.value = Pair(BaseActivity.HIDE_LOADER, BaseActivity.STRING_EMPTY)
     }
 
     fun addNote(note: Note) {
-        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, "Adding Note...")
+        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, BaseActivity.STRING_ADD_NOTE)
         mAlterNoteRepository.addNote(this, note)
     }
 
     fun updateNote(note: Note) {
-        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, "Updating Note...")
+        mIsUpdating.value = Pair(BaseActivity.SHOW_LOADER, BaseActivity.STRING_UPDATE_NOTE)
         mAlterNoteRepository.updateNote(this, note)
     }
 
     override fun noteAltered(isSuccessful: Boolean) {
-        mIsUpdating.postValue(Pair(BaseActivity.HIDE_LOADER, ""))
+        mIsUpdating.postValue(Pair(BaseActivity.HIDE_LOADER, BaseActivity.STRING_EMPTY))
         mIsNoteAlteredSuccessfully.postValue(isSuccessful)
     }
 

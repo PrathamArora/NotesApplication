@@ -2,13 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuItemDelete"
-        android:title="Delete note" />
+        android:title="@string/delete_note" />
 
     <item
         android:id="@+id/menuItemChangeLabel"
-        android:title="Change label" />
-
-    <item
-        android:id="@+id/menuItemOption3"
-        android:title="Option 3" />
+        android:title="@string/change_label" />
 </menu>

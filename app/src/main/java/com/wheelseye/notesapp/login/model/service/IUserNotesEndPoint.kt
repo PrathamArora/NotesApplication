@@ -8,9 +8,6 @@ import retrofit2.http.Query
 
 interface IUserNotesEndPoint {
 
-//    @POST("/loginUser")
-//    fun getUserNotes(@Body emailID: String): Call<GenericAPIModel<UserNotesModel>>
-
     @GET("/loginUser")
     fun getUserNotes(@Query("emailid") emailID: String): Call<GenericAPIModel<UserNotesModel>>
 

@@ -3,16 +3,13 @@ package com.wheelseye.notesapp.login.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.R
-import com.wheelseye.notesapp.db.entity.UserNotes
 import com.wheelseye.notesapp.home.view.activity.HomeActivity
-import com.wheelseye.notesapp.login.model.UserNotesModel
 import com.wheelseye.notesapp.login.viewmodel.LoginViewModel
 import com.wheelseye.notesapp.utility.Utility
 import kotlinx.android.synthetic.main.activity_login.*
@@ -40,7 +37,11 @@ class LoginActivity : BaseActivity() {
             if (Utility.isEmailValid(emailID))
                 mLoginViewModel?.performLogin(this, emailID)
             else
-                Snackbar.make(container, "Invalid Email ID", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    container,
+                    resources.getString(R.string.invalid_email_id),
+                    Snackbar.LENGTH_LONG
+                ).show()
         }
     }
 
@@ -60,7 +61,11 @@ class LoginActivity : BaseActivity() {
 
         mLoginViewModel?.isLoginSuccessful()?.observe(this, Observer {
             if (!it) {
-                Snackbar.make(container, "Internal Error Occurred", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    container,
+                    resources.getString(R.string.internal_error_occurred),
+                    Snackbar.LENGTH_LONG
+                ).show()
             } else {
                 startWorkManager(
                     getSharedPreferences(

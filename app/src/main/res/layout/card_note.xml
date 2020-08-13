@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="Heading 1"
             android:textColor="?customDarkTextColor"
             android:textSize="20sp" />
 
@@ -35,7 +34,6 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="4"
-            android:text="Message"
             android:textColor="?customLightTextColor"
             android:textSize="16sp" />
 
@@ -51,9 +49,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:src="@drawable/self_note"
-                android:contentDescription="Note Label Type"
-                android:scaleType="centerCrop" />
+                android:contentDescription="@string/note_label_type"
+                android:scaleType="centerCrop"
+                android:src="@drawable/self_note" />
 
             <TextView
                 android:id="@+id/tvNoteDate"
@@ -63,7 +61,6 @@
                 android:gravity="center_vertical|end"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:text="Date"
                 android:textColor="?customLightTextColor"
                 android:textSize="12sp" />
 
@@ -72,23 +69,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:gravity="center"
-                android:text="&#8942;"
+                android:text="@string/dots_menu"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="?customDarkTextColor" />
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/imgDelete"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="20dp"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:background="?attr/selectableItemBackgroundBorderless"-->
-            <!--                android:clickable="true"-->
-            <!--                android:focusable="true"-->
-            <!--                android:contentDescription="@string/delete_button"-->
-            <!--                android:src="?customDeleteButton" />-->
 
         </LinearLayout>
 

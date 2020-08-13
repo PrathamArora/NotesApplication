@@ -3,7 +3,7 @@ package com.wheelseye.notesapp.home.view.motion
 import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.wheelseye.notesapp.base.activity.BaseActivity
+import com.wheelseye.notesapp.base.activity.BaseActivity.Companion.TAG
 import com.wheelseye.notesapp.home.view.adapter.NotesAdapter
 
 class ItemTouchHelperCallback(private var mAdapter: NotesAdapter) : ItemTouchHelper.Callback() {
@@ -14,10 +14,6 @@ class ItemTouchHelperCallback(private var mAdapter: NotesAdapter) : ItemTouchHel
 
     override fun isItemViewSwipeEnabled(): Boolean {
         return false
-    }
-
-    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-        super.clearView(recyclerView, viewHolder)
     }
 
     override fun getMovementFlags(
@@ -36,7 +32,7 @@ class ItemTouchHelperCallback(private var mAdapter: NotesAdapter) : ItemTouchHel
         target: RecyclerView.ViewHolder
     ): Boolean {
         Log.d(
-            BaseActivity.TAG,
+            TAG,
             "from = ${viewHolder.adapterPosition}, to = ${target.adapterPosition}"
         )
         return mAdapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)

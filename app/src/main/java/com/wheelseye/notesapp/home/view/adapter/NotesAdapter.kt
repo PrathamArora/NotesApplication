@@ -13,13 +13,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.wheelseye.notesapp.R
 import com.wheelseye.notesapp.base.activity.BaseActivity
-import com.wheelseye.notesapp.crudNotes.model.service.NoteModel
+import com.wheelseye.notesapp.base.activity.BaseActivity.Companion.TAG
 import com.wheelseye.notesapp.crudNotes.view.AlterNoteActivity
 import com.wheelseye.notesapp.db.entity.Note
-import com.wheelseye.notesapp.home.model.repository.IUpdateNotesCallback
+import com.wheelseye.notesapp.home.model.callback.IUpdateNotesCallback
 import com.wheelseye.notesapp.home.view.motion.ItemTouchHelperAdapter
 import com.wheelseye.notesapp.home.view.motion.StartDragListener
-import com.wheelseye.notesapp.home.viewmodel.HomeViewModel
 import java.util.*
 
 class NotesAdapter(
@@ -50,29 +49,19 @@ class NotesAdapter(
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
 
-//        if (fromPosition < 0 || toPosition < 0) {
-//            return false
-//        }
-
         try {
-//            if (fromPosition == 0 || fromPosition == mNoteModelList.size - 1) {
-//                Collections.swap(mNoteModelList, fromPosition, toPosition)
-//                notifyItemMoved(fromPosition, toPosition)
-//                return true
-//            }
-
             if (fromPosition < toPosition) {
-                Log.d(BaseActivity.TAG, "fromPosition < toPosition")
-                Log.d(BaseActivity.TAG, "$fromPosition to $toPosition")
+                Log.d(TAG, "fromPosition < toPosition")
+                Log.d(TAG, "$fromPosition to $toPosition")
                 for (i in fromPosition until toPosition step 1) {
-                    Log.d(BaseActivity.TAG, "$i")
+                    Log.d(TAG, "$i")
                     Collections.swap(mNoteModelList, i, i + 1)
                 }
             } else {
-                Log.d(BaseActivity.TAG, "fromPosition >= toPosition")
-                Log.d(BaseActivity.TAG, "$fromPosition to $toPosition")
+                Log.d(TAG, "fromPosition >= toPosition")
+                Log.d(TAG, "$fromPosition to $toPosition")
                 for (i in fromPosition downTo toPosition + 1 step 1) {
-                    Log.d(BaseActivity.TAG, "$i")
+                    Log.d(TAG, "$i")
                     Collections.swap(mNoteModelList, i, i - 1)
                 }
             }
@@ -96,7 +85,6 @@ class NotesAdapter(
         private var cardNote: CardView? = null
         private var tvPopupMenu: TextView? = null
         private var imgNoteLabel: ImageView? = null
-//        private var imgDelete: ImageView? = null
 
         init {
             noteTitle = itemView.findViewById(R.id.tvNoteTitle)
@@ -105,7 +93,6 @@ class NotesAdapter(
             cardNote = itemView.findViewById(R.id.cardNote)
             tvPopupMenu = itemView.findViewById(R.id.tvPopupMenu)
             imgNoteLabel = itemView.findViewById(R.id.imgNoteLabel)
-//            imgDelete = itemView.findViewById(R.id.imgDelete)
         }
 
         fun initNoteDetails(
@@ -161,10 +148,6 @@ class NotesAdapter(
                 }
                 menu.show()
             }
-
-//            imgDelete?.setOnClickListener {
-//                iDeleteNotesCallback.deleteCurrentNote(noteModel)
-//            }
         }
 
         private fun manageHeading(note: Note) {

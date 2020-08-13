@@ -21,7 +21,7 @@ class UserNotes : Serializable {
             return userNotes
         }
 
-        fun getUserNotesList(userNotesModelList: ArrayList<NoteModel>?): ArrayList<Note> {
+        private fun getUserNotesList(userNotesModelList: ArrayList<NoteModel>?): ArrayList<Note> {
             val userNotesList = ArrayList<Note>()
             userNotesModelList?.let {
                 for (i in 0 until it.size) {

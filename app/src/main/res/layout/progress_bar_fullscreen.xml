@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Doing Something"
         android:textColor="?customDarkTextColor"
         android:textStyle="bold" />
 

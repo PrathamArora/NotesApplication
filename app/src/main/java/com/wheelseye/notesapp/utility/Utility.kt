@@ -11,7 +11,7 @@ class Utility {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
 
-        public fun getCurrentDate(): String {
+        fun getCurrentDate(): String {
             val currentDate = Calendar.getInstance().time
             val dateFormat = SimpleDateFormat(BaseActivity.DATE_FORMAT, Locale.getDefault())
             return dateFormat.format(currentDate)

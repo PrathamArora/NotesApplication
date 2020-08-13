@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="General">
+    <item android:title="@string/general">
         <menu>
             <item
                 android:id="@+id/menuAddNotes"
                 android:icon="@drawable/ic_add_circle_black_24dp"
-                android:title="Add a note" />
-
-            <item
-                android:id="@+id/menuSyncNotes"
-                android:icon="@drawable/ic_sync_black_24dp"
-                android:title="Sync notes" />
+                android:title="@string/add_a_note" />
         </menu>
     </item>
 
-    <item android:title="Profile">
+    <item android:title="@string/profile">
         <menu>
             <item
                 android:id="@+id/menuLogout"
                 android:icon="@drawable/ic_vpn_key_black_24dp"
-                android:title="Logout" />
+                android:title="@string/logout" />
         </menu>
     </item>
 

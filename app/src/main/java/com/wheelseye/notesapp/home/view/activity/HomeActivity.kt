@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -22,7 +21,7 @@ import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.base.view.bottomsheet.ChooseLabelBottomSheet
 import com.wheelseye.notesapp.crudNotes.view.AlterNoteActivity
 import com.wheelseye.notesapp.db.entity.Note
-import com.wheelseye.notesapp.home.model.repository.IUpdateNotesCallback
+import com.wheelseye.notesapp.home.model.callback.IUpdateNotesCallback
 import com.wheelseye.notesapp.home.view.adapter.NotesAdapter
 import com.wheelseye.notesapp.home.view.motion.ItemTouchHelperCallback
 import com.wheelseye.notesapp.home.view.motion.StartDragListener
@@ -46,7 +45,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Home"
+        supportActionBar?.title = resources.getString(R.string.home)
 
 
         initViews()
@@ -107,7 +106,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun setUserNavData() {
         val sharedPreference = getSharedPreferences(USER_DETAILS_SHARED_PREF, Context.MODE_PRIVATE)
-        navTvEmailId?.text = sharedPreference.getString(USER_EMAIL_ID, "Guest User")
+        navTvEmailId?.text = sharedPreference.getString(USER_EMAIL_ID, GUEST_USER)
     }
 
 
@@ -150,16 +149,12 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         })
     }
 
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         drawerLayout.closeDrawer(GravityCompat.START)
         when (item.itemId) {
             R.id.menuAddNotes -> {
                 val intent = Intent(this, AlterNoteActivity::class.java)
                 startActivity(intent)
-            }
-            R.id.menuSyncNotes -> {
-//                mHomeViewModel?.syncNotes(this)
             }
             R.id.menuLogout -> {
                 mHomeViewModel?.logout(this)
@@ -169,8 +164,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun deleteCurrentNote(note: Note) {
-        // Doubt
-        // How to add icon based on theme?
 
         val builder = AlertDialog.Builder(this)
 
@@ -178,12 +171,12 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .setMessage("Do you want to delete this note from " + note.date + "?")
             .setCancelable(false)
             .setPositiveButton(
-                "Yes"
+                STRING_YES
             ) { _, _ ->
                 mHomeViewModel?.deleteNote(note)
             }
             .setNegativeButton(
-                "No"
+                STRING_NO
             ) { _, _ -> }
             .show()
     }
@@ -192,7 +185,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toBeEditedNote = note
         chooseLabelBottomSheet =
             ChooseLabelBottomSheet()
-        chooseLabelBottomSheet?.show(supportFragmentManager, "Choose Label")
+        chooseLabelBottomSheet?.show(supportFragmentManager, CHOOSE_LABEL_TAG)
     }
 
     override fun onLabelSelected(labelKey: Int) {

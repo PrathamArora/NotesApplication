@@ -17,7 +17,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:gravity="center_horizontal"
-        android:text="Welcome to NotesApp"
+        android:text="@string/welcome_to_notesapp"
         android:textColor="?customDarkTextColor"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="30"
-                android:hint="Enter your E-mail ID"
+                android:hint="@string/enter_your_e_mail_id"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_selector"
-            android:text="Login" />
+            android:text="@string/login" />
 
     </LinearLayout>
 
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Version 1.0.0"
+        android:text="@string/version_1_0_0"
         android:textColor="?customLightTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

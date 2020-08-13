@@ -1,4 +1,4 @@
-package com.wheelseye.notesapp.home.model.repository
+package com.wheelseye.notesapp.home.model.callback
 
 interface IAllNotesCallback {
     fun updateAllNotes()

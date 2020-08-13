@@ -1,7 +1,7 @@
 package com.wheelseye.notesapp.utility
 
 import com.wheelseye.notesapp.R
-import java.util.*
+import com.wheelseye.notesapp.base.activity.BaseActivity
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -10,14 +10,13 @@ object NoteLabel {
     private val noteLabelMap = HashMap<String, Pair<Int, Int>>()
     private val idLabelMap = HashMap<Int, String>()
 
-    private const val WORK = "Work"
-    private const val SELF = "Self"
-    private const val OTHER = "Other"
-    private const val DEFAULT_LABEL = OTHER
+    private const val WORK = BaseActivity.LABEL_WORK
+    private const val SELF = BaseActivity.LABEL_SELF
+    private const val OTHER = BaseActivity.LABEL_OTHER
 
-    private const val SELF_INT = 1
-    private const val WORK_INT = SELF_INT + 1
-    private const val OTHER_INT = WORK_INT + 1
+    private const val SELF_INT = BaseActivity.LABEL_SELF_INT
+    private const val WORK_INT = BaseActivity.LABEL_WORK_INT
+    private const val OTHER_INT = BaseActivity.LABEL_OTHER_INT
     private const val DEFAULT_INT = OTHER_INT
 
 
@@ -32,15 +31,9 @@ object NoteLabel {
     }
 
     fun getColorAndDrawable(key: Int?): Pair<Int, Int> {
-
         val noteKey = key ?: OTHER_INT
         val noteKeyStr = idLabelMap[noteKey]
         return noteLabelMap[noteKeyStr]!!
-//        return if (key.isNullOrEmpty() || !noteLabelMap.containsKey(key.toLowerCase(Locale.getDefault()))) {
-//            noteLabelMap[getDefaultLabel()]!!
-//        } else {
-//            noteLabelMap[key.toLowerCase(Locale.getDefault())]!!
-//        }
     }
 
     fun getLabel(key: Int?): String {
@@ -65,13 +58,7 @@ object NoteLabel {
         return labelKey !in minLimit..maxLimit
     }
 
-    fun getAllLabels(): ArrayList<String> {
-        val allLabels = ArrayList<String>()
-        allLabels.addAll(noteLabelMap.keys)
-        return allLabels
-    }
-
-    fun getDefaultLabel(): String {
+    private fun getDefaultLabel(): String {
         return idLabelMap[DEFAULT_INT].toString()
     }
 
