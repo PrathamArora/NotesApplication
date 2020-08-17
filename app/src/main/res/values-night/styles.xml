@@ -39,4 +39,10 @@
         <item name="colorControlHighlight">@android:color/white</item>
     </style>
 
+    <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
+<!--        <item name="itemIconTint">@color/colorAccent</item>-->
+        <item name="itemTextColor">@android:color/white</item>
+        <item name="itemBackground">@drawable/menu_background_color_state</item>
+    </style>
+
 </resources>

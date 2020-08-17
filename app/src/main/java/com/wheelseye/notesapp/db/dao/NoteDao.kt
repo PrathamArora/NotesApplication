@@ -12,6 +12,9 @@ interface NoteDao {
     @Query("select * from UserNotes where isDeleted = 0 order by notesID desc")
     fun getAllNotes(): LiveData<List<Note>>
 
+    @Query("select * from UserNotes where isDeleted = 0 and label = :category order by notesID desc")
+    fun getNotesWithLabel(category: Int): LiveData<List<Note>>?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNote(note: Note)
 

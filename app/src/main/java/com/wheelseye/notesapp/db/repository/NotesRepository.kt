@@ -1,6 +1,7 @@
 package com.wheelseye.notesapp.db.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.wheelseye.notesapp.base.workmanager.model.NoteIdMapModel
 import com.wheelseye.notesapp.base.workmanager.model.NoteServerModel
 import com.wheelseye.notesapp.db.dao.NoteDao
@@ -14,7 +15,8 @@ class NotesRepository(context: Context) {
         noteDao = NotesRoomDatabase.getDatabase(context.applicationContext).noteDao()
     }
 
-    val allNotes = noteDao?.getAllNotes()
+    var allNotes = noteDao?.getAllNotes()
+
 
     suspend fun insert(note: Note) {
         noteDao?.insertNote(note)
@@ -64,6 +66,10 @@ class NotesRepository(context: Context) {
 
     fun updateDeletedNotes(appNotesID: Long) {
         noteDao?.updateDeletedNotes(appNotesID)
+    }
+
+    fun getNotesWithLabel(category: Int): LiveData<List<Note>>? {
+        return noteDao?.getNotesWithLabel(category)
     }
 
 }

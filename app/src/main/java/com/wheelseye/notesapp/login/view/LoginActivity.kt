@@ -24,6 +24,12 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
 
+        val sharedPref = getSharedPreferences(USER_DETAILS_SHARED_PREF, Context.MODE_PRIVATE)
+        if (sharedPref.contains(USER_ID) && sharedPref.getLong(USER_ID, -1) != (-1).toLong()) {
+            moveToHomeScreen()
+        }
+
+
         initViewModel()
         setObservers()
         initListeners()

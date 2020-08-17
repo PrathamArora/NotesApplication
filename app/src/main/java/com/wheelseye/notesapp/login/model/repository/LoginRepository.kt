@@ -56,6 +56,12 @@ class LoginRepository {
                         return
                     }
                     mUserNotes = UserNotes.getUserNotesFromModel(response.body()?.data)
+
+                    if (mUserNotes?.userID == (-1).toLong()) {
+                        iLoginCallback.updateLoginDetails(false)
+                        return
+                    }
+
                     GlobalScope.launch {
                         saveUser(context)
                         dropAndAddNotes(context)

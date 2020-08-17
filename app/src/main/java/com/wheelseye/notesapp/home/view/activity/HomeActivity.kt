@@ -38,15 +38,18 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var mNotesAdapter: NotesAdapter? = null
     private var itemTouchHelper: ItemTouchHelper? = null
     private val allNotesList = ArrayList<Note>()
+    private val filteredNotesList = ArrayList<Note>()
     private var chooseLabelBottomSheet: ChooseLabelBottomSheet? = null
     private var toBeEditedNote: Note? = null
+    private var currentFilterLabel = LABEL_ALL_INT
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.title = resources.getString(R.string.home)
-
+        checkForValidUser(this)
 
         initViews()
         initRecyclerView()
@@ -67,7 +70,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         manageVisibility()
 
-        mNotesAdapter = NotesAdapter(allNotesList, this, this, this)
+        mNotesAdapter = NotesAdapter(filteredNotesList, this, this, this)
         var itemsPerRow = PORTRAIT_NOTES
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
             itemsPerRow = LANDSCAPE_NOTES
@@ -82,7 +85,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun manageVisibility() {
-        if (allNotesList.isNullOrEmpty()) {
+        if (filteredNotesList.isNullOrEmpty()) {
             imgNoNotes.visibility = View.VISIBLE
             rvAllNotes.visibility = View.GONE
         } else {
@@ -94,6 +97,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun initViews() {
         navView.setNavigationItemSelectedListener(this)
         navView.bringToFront()
+        navView.itemIconTintList = null
         val toggle =
             ActionBarDrawerToggle(this, drawerLayout!!, toolbar!!, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -102,6 +106,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         val headerView = navView.getHeaderView(0)
         navTvEmailId = headerView.findViewById(R.id.tvEmailID)
+        navView.menu.getItem(1).subMenu.getItem(0).isChecked = true
     }
 
     private fun setUserNavData() {
@@ -127,16 +132,22 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         mHomeViewModel?.init(this)
 
-        mHomeViewModel?.getAllNotes()?.observe(this, Observer {
-            allNotesList.clear()
-            allNotesList.addAll(it)
-            manageVisibility()
-            mNotesAdapter?.notifyDataSetChanged()
-        })
+        mHomeViewModel?.getAllNotes()
+            ?.observe(this, Observer {
+                allNotesList.clear()
+                allNotesList.addAll(it)
+                filterData()
+                mNotesAdapter?.notifyDataSetChanged()
+            })
+
 
         mHomeViewModel?.getSingleNoteChange()?.observe(this, Observer {
-            manageVisibility()
-            mNotesAdapter?.notifyItemChanged(it)
+            val editedNote = allNotesList[it]
+            val indexInFilteredData = filteredNotesList.indexOf(editedNote)
+            if (indexInFilteredData != -1) {
+                mNotesAdapter?.notifyItemChanged(it)
+                filterData()
+            }
         })
 
         mHomeViewModel?.isLogoutSuccessful()?.observe(this, Observer {
@@ -149,17 +160,51 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         })
     }
 
+    private fun filterData() {
+        filteredNotesList.clear()
+        if (currentFilterLabel == LABEL_ALL_INT) {
+            filteredNotesList.addAll(allNotesList)
+        } else {
+            for (i in 0 until allNotesList.size) {
+                if (allNotesList[i].label == currentFilterLabel) {
+                    filteredNotesList.add(allNotesList[i])
+                }
+            }
+        }
+        mNotesAdapter?.notifyDataSetChanged()
+        manageVisibility()
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawerLayout.closeDrawer(GravityCompat.START)
         when (item.itemId) {
             R.id.menuAddNotes -> {
                 val intent = Intent(this, AlterNoteActivity::class.java)
                 startActivity(intent)
             }
+            R.id.menuAllNotes -> {
+                currentFilterLabel = LABEL_ALL_INT
+                filterData()
+            }
+            R.id.menuSelfNotes -> {
+                navView.menu.getItem(1).subMenu.getItem(0).isChecked = false
+                currentFilterLabel = LABEL_SELF_INT
+                filterData()
+            }
+            R.id.menuWorkNotes -> {
+                navView.menu.getItem(1).subMenu.getItem(0).isChecked = false
+                currentFilterLabel = LABEL_WORK_INT
+                filterData()
+            }
+            R.id.menuOtherNotes -> {
+                navView.menu.getItem(1).subMenu.getItem(0).isChecked = false
+                currentFilterLabel = LABEL_OTHER_INT
+                filterData()
+            }
             R.id.menuLogout -> {
                 mHomeViewModel?.logout(this)
             }
         }
+        drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 

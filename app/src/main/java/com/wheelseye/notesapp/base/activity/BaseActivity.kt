@@ -1,6 +1,7 @@
 package com.wheelseye.notesapp.base.activity
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.work.*
 import com.wheelseye.notesapp.base.workmanager.SyncNotesWorkManager
 import com.wheelseye.notesapp.db.entity.Note
+import com.wheelseye.notesapp.login.view.LoginActivity
 import com.wheelseye.notesapp.utility.NoteLabel
 import java.util.concurrent.TimeUnit
 
@@ -41,10 +43,12 @@ abstract class BaseActivity : AppCompatActivity(),
 
         const val DATE_FORMAT = "dd/MM/yyyy"
         const val CHOOSE_LABEL_TAG = "Choose Label"
+        const val LABEL_ALL = "All"
         const val LABEL_WORK = "Work"
         const val LABEL_SELF = "Self"
         const val LABEL_OTHER = "Other"
 
+        const val LABEL_ALL_INT = 0
         const val LABEL_SELF_INT = 1
         const val LABEL_WORK_INT = 2
         const val LABEL_OTHER_INT = 3
@@ -105,6 +109,7 @@ abstract class BaseActivity : AppCompatActivity(),
     fun stopWorkManager(workManagerTag: String) {
         try {
             WorkManager.getInstance(applicationContext).cancelAllWorkByTag(workManagerTag)
+            Log.d(WORK_MANAGER_TAG, "WorkManager Stopped.....!")
         } catch (e: Exception) {
             Log.d(TAG, "Work Manager not found !")
         }
@@ -115,5 +120,15 @@ abstract class BaseActivity : AppCompatActivity(),
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
+    }
+
+    fun checkForValidUser(context: Context) {
+        val sharedPref = getSharedPreferences(USER_DETAILS_SHARED_PREF, Context.MODE_PRIVATE)
+        if (!sharedPref.contains(USER_ID) || sharedPref.getLong(USER_ID, -1) == (-1).toLong()) {
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
     }
 }

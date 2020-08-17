@@ -30,6 +30,7 @@ class AlterNoteActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alter_note)
         setSupportActionBar(toolbar)
+        checkForValidUser(this)
 
         initView()
         setData()

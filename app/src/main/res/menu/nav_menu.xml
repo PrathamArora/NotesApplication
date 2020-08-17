@@ -8,6 +8,28 @@
                 android:title="@string/add_a_note" />
         </menu>
     </item>
+    <item android:title="Categories">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menuAllNotes"
+                    android:icon="@drawable/nav_bar_all_label"
+                    android:title="All Notes" />
+                <item
+                    android:id="@+id/menuSelfNotes"
+                    android:icon="@drawable/nav_bar_self_label"
+                    android:title="Self" />
+                <item
+                    android:id="@+id/menuWorkNotes"
+                    android:icon="@drawable/nav_bar_work_label"
+                    android:title="Work" />
+                <item
+                    android:id="@+id/menuOtherNotes"
+                    android:icon="@drawable/nav_bar_other_label"
+                    android:title="Other" />
+            </group>
+        </menu>
+    </item>
 
     <item android:title="@string/profile">
         <menu>

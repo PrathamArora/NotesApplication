@@ -6,10 +6,7 @@ import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.db.repository.NotesRepository
 import com.wheelseye.notesapp.home.model.callback.IAllNotesCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class HomeRepository {
 
@@ -21,11 +18,40 @@ class HomeRepository {
         notesRepository = NotesRepository(context)
     }
 
-
     fun getAllNotes(): LiveData<List<Note>>? {
         return notesRepository?.allNotes
     }
 
+
+//    fun getAllNotes(category: Int) : LiveData<List<Note>>? {
+//    GlobalScope.launch {
+//            val currentLiveData  : LiveData<List<Note>>? = withContext(Dispatchers.IO){
+//                when (category) {
+//                    BaseActivity.LABEL_ALL_INT -> {
+//                        notesRepository?.allNotes
+//                    }
+//                    BaseActivity.LABEL_SELF_INT -> {
+//                        notesRepository?.selfNotes
+//                    }
+//                    else -> {
+//                        notesRepository?.getNotesWithLabel(category)
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+
+//    private suspend fun getAllNotesWithLabel(category: Int): LiveData<List<Note>>? {
+//        return if (category == BaseActivity.LABEL_ALL_INT) {
+//            notesRepository?.allNotes
+//        } else if (category == BaseActivity.LABEL_SELF_INT) {
+//            notesRepository?.selfNotes
+//        } else {
+//            notesRepository?.getNotesWithLabel(category)
+//        }
+//    }
+//
 
     fun deleteNote(note: Note, iAllNotesCallback: IAllNotesCallback) {
         GlobalScope.launch {

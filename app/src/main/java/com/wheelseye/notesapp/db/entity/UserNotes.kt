@@ -16,7 +16,7 @@ class UserNotes : Serializable {
             val userNotes = UserNotes()
 
 
-            userNotes.userID = userNotesModel?.userID?.toLong() ?: 1
+            userNotes.userID = userNotesModel?.userID?.toLong() ?: -1
             userNotes.userNotes = getUserNotesList(userNotesModel?.userNotes)
             return userNotes
         }

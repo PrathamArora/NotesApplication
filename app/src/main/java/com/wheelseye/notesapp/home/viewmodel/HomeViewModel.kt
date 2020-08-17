@@ -8,6 +8,7 @@ import com.wheelseye.notesapp.base.activity.BaseActivity
 import com.wheelseye.notesapp.db.entity.Note
 import com.wheelseye.notesapp.home.model.repository.HomeRepository
 import com.wheelseye.notesapp.home.model.callback.IAllNotesCallback
+import com.wheelseye.notesapp.home.view.activity.HomeActivity
 import com.wheelseye.notesapp.utility.NoteLabel
 
 class HomeViewModel : ViewModel(),
@@ -45,7 +46,6 @@ class HomeViewModel : ViewModel(),
 
     override fun updateAllNotes() {
         mIsUpdating.postValue(Pair(BaseActivity.HIDE_LOADER, BaseActivity.STRING_EMPTY))
-        mUserNotesLiveData.postValue(getAllNotes()?.value)
     }
 
     override fun updateSingleNote(position: Int) {

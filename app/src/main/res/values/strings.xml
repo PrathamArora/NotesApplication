@@ -36,4 +36,6 @@
     <string name="home">Home</string>
     <string name="invalid_email_id">Invalid Email ID</string>
     <string name="internal_error_occurred">Internal Error Occurred</string>
+    <string name="shortcut_short_label">Add Note</string>
+    <string name="shortcut_long_label">Add a new note</string>
 </resources>
