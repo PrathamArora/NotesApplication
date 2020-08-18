@@ -68,8 +68,8 @@ class NotesRepository(context: Context) {
         noteDao?.updateDeletedNotes(appNotesID)
     }
 
-    fun getNotesWithLabel(category: Int): LiveData<List<Note>>? {
-        return noteDao?.getNotesWithLabel(category)
+    fun getAllNotesList(): List<Note>? {
+        return noteDao?.getListNotes()
     }
 
 }

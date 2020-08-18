@@ -175,6 +175,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         manageVisibility()
     }
 
+    fun getFilteredNotesList(): ArrayList<Note> {
+        return filteredNotesList
+    }
+
+    fun getCurrentFilterLabel(): Int {
+        return currentFilterLabel
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menuAddNotes -> {
