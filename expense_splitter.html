@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Splitter</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --accent: #c4622d;
+    --accent2: #2d7fc4;
+    --accent3: #2dc47a;
+    --muted: #8a8070;
+    --line: #d4cdc0;
+    --apurva: #c4622d;
+    --pratham: #2d7fc4;
+    --shreya: #2dc47a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(transparent, transparent 31px, var(--line) 31px, var(--line) 32px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 2.5px solid var(--ink);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* RATIO PANEL */
+  .ratio-panel {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 4px;
+    padding: 20px 28px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .ratio-panel label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .ratio-inputs {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .ratio-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ratio-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(245,240,232,0.3);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    width: 70px;
+    padding: 4px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ratio-field input:focus { border-bottom-color: var(--paper); }
+
+  .ratio-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    opacity: 0.55;
+    margin-top: 6px;
+  }
+
+  .ratio-total {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    white-space: nowrap;
+  }
+
+  /* EXPENSE TABLE */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--ink);
+    opacity: 0.15;
+  }
+
+  .expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+
+  .expense-table th {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1.5px solid var(--line);
+    font-weight: 500;
+  }
+
+  .expense-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  .expense-table tr:last-child td { border-bottom: none; }
+
+  .expense-table input[type="number"],
+  .expense-table input[type="text"],
+  .expense-table select {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    padding: 4px 2px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .expense-table input:focus,
+  .expense-table select:focus {
+    border-bottom-color: var(--accent);
+  }
+
+  .expense-table select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .person-select {
+    position: relative;
+  }
+
+  .person-select::after {
+    content: '▾';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-A { background: rgba(196,98,45,0.12); color: var(--apurva); }
+  .tag-P { background: rgba(45,127,196,0.12); color: var(--pratham); }
+  .tag-S { background: rgba(45,196,122,0.12); color: var(--shreya); }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1rem;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+    opacity: 0.5;
+  }
+  .remove-btn:hover { color: #c43333; opacity: 1; }
+
+  .add-btn {
+    background: none;
+    border: 1.5px dashed var(--line);
+    border-radius: 4px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .add-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(196,98,45,0.04);
+  }
+
+  /* SUMMARY */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+
+  .person-card {
+    border-radius: 6px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-A { background: rgba(196,98,45,0.08); border: 1.5px solid rgba(196,98,45,0.25); }
+  .card-P { background: rgba(45,127,196,0.08); border: 1.5px solid rgba(45,127,196,0.25); }
+  .card-S { background: rgba(45,196,122,0.08); border: 1.5px solid rgba(45,196,122,0.25); }
+
+  .card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+  }
+  .card-A .card-name { color: var(--apurva); }
+  .card-P .card-name { color: var(--pratham); }
+  .card-S .card-name { color: var(--shreya); }
+
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+
+  .card-row .lbl {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+
+  .card-row .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .card-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 12px 0;
+  }
+
+  .card-net {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    text-align: right;
+  }
+
+  .net-positive { color: #1a8c4e; }
+  .net-negative { color: #c43333; }
+  .net-zero { color: var(--muted); }
+
+  .net-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  /* SETTLEMENTS */
+  .settle-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .settle-item {
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+
+  .settle-item .arrow { color: var(--muted); font-size: 1.2rem; }
+  .settle-item .amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-left: auto;
+    color: var(--accent);
+  }
+
+  .settle-empty {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-style: italic;
+    background: rgba(255,255,255,0.5);
+    border: 1.5px dashed var(--line);
+    border-radius: 6px;
+  }
+
+  .currency-sym {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-right: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Split <em>Smart,</em> Stay Friends</h1>
+    <p class="subtitle">Expense Splitter &mdash; Apurva · Pratham · Shreya</p>
+  </header>
+
+  <!-- RATIO PANEL -->
+  <div class="ratio-panel">
+    <div>
+      <label>Ratio Mode</label>
+      <span style="font-size:0.85rem; opacity:0.8">Parts out of total</span>
+    </div>
+    <div class="ratio-inputs">
+      <div class="ratio-field">
+        <label style="color:rgba(245,240,232,0.6)">Apurva</label>
+        <input type="number" id="ratioA" value="2" min="0" step="0.5" oninput="recalc()">
+        <div class="ratio-display" id="ratioAd">28.57%</div>
+      </div>
+      <div class="ratio-field">
+        <label style="color:rgba(245,240,232,0.6)">Pratham</label>
+        <input type="number" id="ratioP" value="3" min="0" step="0.5" oninput="recalc()">
+        <div class="ratio-display" id="ratioPd">42.86%</div>
+      </div>
+      <div class="ratio-field">
+        <label style="color:rgba(245,240,232,0.6)">Shreya</label>
+        <input type="number" id="ratioS" value="2" min="0" step="0.5" oninput="recalc()">
+        <div class="ratio-display" id="ratioSd">28.57%</div>
+      </div>
+    </div>
+    <div class="ratio-total" id="ratioTotal">Total: 7 parts</div>
+  </div>
+
+  <!-- EXPENSE ENTRY -->
+  <div class="section-title">Expenses</div>
+  <table class="expense-table" id="expenseTable">
+    <thead>
+      <tr>
+        <th style="width:180px">Description</th>
+        <th style="width:130px">Amount (₹)</th>
+        <th style="width:130px">Paid By</th>
+        <th style="width:100px">Apurva's ₹</th>
+        <th style="width:100px">Pratham's ₹</th>
+        <th style="width:100px">Shreya's ₹</th>
+        <th style="width:36px"></th>
+      </tr>
+    </thead>
+    <tbody id="expenseBody"></tbody>
+  </table>
+  <button class="add-btn" onclick="addRow()">+ Add Expense</button>
+
+  <!-- SUMMARY -->
+  <div class="section-title" style="margin-top:48px">Summary</div>
+  <div class="summary-grid" id="summaryGrid"></div>
+
+  <!-- SETTLEMENTS -->
+  <div class="section-title">Settlements</div>
+  <ul class="settle-list" id="settleList"></ul>
+</div>
+
+<script>
+  const PEOPLE = ['Apurva', 'Pratham', 'Shreya'];
+  const KEYS = ['A', 'P', 'S'];
+  let rows = [];
+  let nextId = 0;
+
+  function getRatios() {
+    const a = parseFloat(document.getElementById('ratioA').value) || 0;
+    const p = parseFloat(document.getElementById('ratioP').value) || 0;
+    const s = parseFloat(document.getElementById('ratioS').value) || 0;
+    const total = a + p + s;
+    return { A: a, P: p, S: s, total };
+  }
+
+  function fmt(n) {
+    return '₹' + Math.abs(n).toLocaleString('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  }
+
+  function addRow(desc = '', amt = '', payer = '') {
+    const id = nextId++;
+    rows.push({ id, desc, amt, payer });
+    renderTable();
+    recalc();
+  }
+
+  function removeRow(id) {
+    rows = rows.filter(r => r.id !== id);
+    renderTable();
+    recalc();
+  }
+
+  function renderTable() {
+    const { A, P, S, total } = getRatios();
+    const rA = total ? A / total : 0;
+    const rP = total ? P / total : 0;
+    const rS = total ? S / total : 0;
+
+    const tbody = document.getElementById('expenseBody');
+    tbody.innerHTML = '';
+
+    rows.forEach(row => {
+      const amt = parseFloat(row.amt) || 0;
+      const shareA = amt * rA;
+      const shareP = amt * rP;
+      const shareS = amt * rS;
+      const payerKey = KEYS[PEOPLE.indexOf(row.payer)] || '';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" placeholder="e.g. Dinner" value="${row.desc}" 
+          oninput="rows.find(r=>r.id===${row.id}).desc=this.value"></td>
+        <td><input type="number" placeholder="0" value="${row.amt}" min="0" step="any"
+          oninput="rows.find(r=>r.id===${row.id}).amt=this.value; recalc()"></td>
+        <td>
+          <div class="person-select" style="position:relative">
+            <select oninput="rows.find(r=>r.id===${row.id}).payer=this.value; renderTable(); recalc()">
+              <option value="">— select —</option>
+              ${PEOPLE.map(p => `<option value="${p}" ${p === row.payer ? 'selected' : ''}>${p}</option>`).join('')}
+            </select>
+          </div>
+          ${payerKey ? `<span class="tag tag-${payerKey}" style="margin-top:4px;display:inline-block">${row.payer}</span>` : ''}
+        </td>
+        <td style="font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--apurva)">
+          ${amt ? '₹' + shareA.toFixed(2) : '—'}
+        </td>
+        <td style="font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--pratham)">
+          ${amt ? '₹' + shareP.toFixed(2) : '—'}
+        </td>
+        <td style="font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--shreya)">
+          ${amt ? '₹' + shareS.toFixed(2) : '—'}
+        </td>
+        <td><button class="remove-btn" onclick="removeRow(${row.id})">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function recalc() {
+    // Update ratio displays
+    const { A, P, S, total } = getRatios();
+    document.getElementById('ratioAd').textContent = total ? (A / total * 100).toFixed(2) + '%' : '—';
+    document.getElementById('ratioPd').textContent = total ? (P / total * 100).toFixed(2) + '%' : '—';
+    document.getElementById('ratioSd').textContent = total ? (S / total * 100).toFixed(2) + '%' : '—';
+    document.getElementById('ratioTotal').textContent = `Total: ${total} parts`;
+
+    const rA = total ? A / total : 0;
+    const rP = total ? P / total : 0;
+    const rS = total ? S / total : 0;
+
+    // Calculate paid and owed
+    const paid = { A: 0, P: 0, S: 0 };
+    const owed = { A: 0, P: 0, S: 0 };
+
+    rows.forEach(row => {
+      const amt = parseFloat(row.amt) || 0;
+      if (!amt) return;
+      const key = KEYS[PEOPLE.indexOf(row.payer)];
+      if (key) paid[key] += amt;
+      owed.A += amt * rA;
+      owed.P += amt * rP;
+      owed.S += amt * rS;
+    });
+
+    const net = {
+      A: paid.A - owed.A,
+      P: paid.P - owed.P,
+      S: paid.S - owed.S,
+    };
+
+    // Render summary cards
+    const grid = document.getElementById('summaryGrid');
+    grid.innerHTML = '';
+    KEYS.forEach(k => {
+      const name = PEOPLE[KEYS.indexOf(k)];
+      const netVal = net[k];
+      const netClass = netVal > 0.005 ? 'net-positive' : netVal < -0.005 ? 'net-negative' : 'net-zero';
+      const netLabel = netVal > 0.005 ? 'gets back' : netVal < -0.005 ? 'owes' : 'settled';
+
+      grid.innerHTML += `
+        <div class="person-card card-${k}">
+          <div class="card-name">${name}</div>
+          <div class="card-row">
+            <span class="lbl">Paid</span>
+            <span class="val">${fmt(paid[k])}</span>
+          </div>
+          <div class="card-row">
+            <span class="lbl">Should pay</span>
+            <span class="val">${fmt(owed[k])}</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-net ${netClass}">${fmt(Math.abs(netVal))}</div>
+          <div class="net-label">${netLabel}</div>
+        </div>
+      `;
+    });
+
+    // Compute settlements (min-cash-flow)
+    const balances = { A: net.A, P: net.P, S: net.S };
+    const settlements = [];
+    const eps = 0.01;
+
+    for (let iter = 0; iter < 20; iter++) {
+      const creditor = Object.entries(balances).sort((a, b) => b[1] - a[1])[0];
+      const debtor = Object.entries(balances).sort((a, b) => a[1] - b[1])[0];
+      if (creditor[1] < eps || debtor[1] > -eps) break;
+
+      const amount = Math.min(creditor[1], -debtor[1]);
+      if (amount < eps) break;
+
+      const fromName = PEOPLE[KEYS.indexOf(debtor[0])];
+      const toName = PEOPLE[KEYS.indexOf(creditor[0])];
+      settlements.push({ from: fromName, to: toName, amount });
+
+      balances[creditor[0]] -= amount;
+      balances[debtor[0]] += amount;
+    }
+
+    // Render settlements
+    const ul = document.getElementById('settleList');
+    if (settlements.length === 0) {
+      ul.innerHTML = `<li class="settle-empty">Add expenses above to see who owes whom ✨</li>`;
+    } else {
+      ul.innerHTML = settlements.map(s => `
+        <li class="settle-item">
+          <span class="tag tag-${KEYS[PEOPLE.indexOf(s.from)]}">${s.from}</span>
+          <span class="arrow">→</span>
+          <span class="tag tag-${KEYS[PEOPLE.indexOf(s.to)]}">${s.to}</span>
+          <span class="amount">${fmt(s.amount)}</span>
+        </li>
+      `).join('');
+    }
+
+    renderTable();
+  }
+
+  // Initialize with data from the screenshot
+  addRow('Expense 1', '5000', 'Pratham');
+  addRow('Expense 2', '5000', 'Shreya');
+</script>
+</body>
+</html>
